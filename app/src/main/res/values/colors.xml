@@ -7,4 +7,12 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+<!--    My colors-->
+    <color name="book_item_bg_disabled">#CFDBC2</color>
+    <color name="book_item_bg_enabled">#86A366</color>
+    <color name="add_new_book_button">#FFEB3B</color>
+    <color name="background_item_list">#709C3E</color>
+    <color name="swipe_delete_color">#D65E80</color>
+    <color name="button_color">#BF009688</color>
 </resources>
