@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.mylibrary.domain.entity.Book
 import com.example.mylibrary.domain.repository.BookRepository
+import kotlin.random.Random
 
 class BookRepositoryImpl: BookRepository {
 
@@ -13,7 +14,12 @@ class BookRepositoryImpl: BookRepository {
 
     init{
         for(i in 0 until 10){
-            val item = Book("Title $i", "Author $i", "Description $i")
+            val item = Book(
+                "Title $i",
+                "Author $i",
+                "Description $i",
+                enabled = Random.nextBoolean()
+            )
             addBookItem(item)
         }
     }
