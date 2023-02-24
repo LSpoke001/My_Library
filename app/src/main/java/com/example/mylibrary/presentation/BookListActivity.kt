@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mylibrary.R
 
@@ -25,13 +26,36 @@ class BookListActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView() {
-        val rvAdapter = findViewById<RecyclerView>(R.id.rv_bookList)
-        with(rvAdapter){
+        val rvBookList = findViewById<RecyclerView>(R.id.rv_bookList)
+        with(rvBookList){
             bookListAdapter = BookListAdapter()
             adapter= bookListAdapter
         }
         setupClickListener()
         setupLongClickListener()
+        setupSwipeBookItem(rvBookList)
+    }
+
+    private fun setupSwipeBookItem(rvBookList: RecyclerView?) {
+        val callBack = object: ItemTouchHelper.SimpleCallback(
+            0,
+            ItemTouchHelper.LEFT
+        ){
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val item = bookListAdapter.currentList[viewHolder.adapterPosition]
+                viewModel.deleteBookItem(item)
+            }
+        }
+        val itemTouchHelper = ItemTouchHelper(callBack)
+        itemTouchHelper.attachToRecyclerView(rvBookList)
     }
 
     private fun setupLongClickListener() {
