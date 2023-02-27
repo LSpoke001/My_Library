@@ -20,6 +20,20 @@
         tools:itemCount="12"
         tools:listitem="@layout/item_enabled"/>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btn_add_book"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        app:srcCompat="@drawable/plus"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="24dp"
+        android:backgroundTint="#AAAAAA"
+        app:layout_constraintEnd_toEndOf="@id/guideline"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="283dp"
+        tools:layout_editor_absoluteY="632dp" />
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
         android:layout_width="wrap_content"

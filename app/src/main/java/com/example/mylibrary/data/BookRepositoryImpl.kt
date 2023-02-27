@@ -17,7 +17,6 @@ class BookRepositoryImpl: BookRepository {
             val item = Book(
                 "Title $i",
                 "Author $i",
-                "Description $i",
                 enabled = Random.nextBoolean()
             )
             addBookItem(item)
