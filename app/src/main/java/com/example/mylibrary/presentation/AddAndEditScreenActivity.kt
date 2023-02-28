@@ -7,7 +7,7 @@ import android.os.Bundle
 import com.example.mylibrary.R
 import com.example.mylibrary.domain.entity.Book
 
-class AddAndEditScreenActivity : AppCompatActivity() {
+class AddAndEditScreenActivity : AppCompatActivity(), AddAndEditFragment.OnEditingFinishedListener {
 
     private var screenMode = UNKNOWN_MODE
     private var bookId = Book.UNIDENTIFIED_ID
@@ -15,10 +15,22 @@ class AddAndEditScreenActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_and_edit_screen)
         parseIntent()
+        if(savedInstanceState == null){
+            launchRightMode()
+        }
+    }
+
+    private fun launchRightMode() {
+       val fragment = when(screenMode){
+           MODE_ADD -> AddAndEditFragment.newInstanceAddFragment()
+           MODE_EDIT -> AddAndEditFragment.newInstanceEditFragment(bookId)
+           else -> throw RuntimeException("Unknown mode")
+       }
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, AddAndEditFragment())
+            .replace(R.id.fragment_container, fragment)
             .commit()
     }
+
     private fun parseIntent(){
         if(!intent.hasExtra(EXTRA_SCREEN_MODE)){
             throw RuntimeException("Extra screen mode is absent")
@@ -54,5 +66,9 @@ class AddAndEditScreenActivity : AppCompatActivity() {
             intent.putExtra(EXTRA_BOOK_ITEM_ID, bookId)
             return intent
         }
+    }
+
+    override fun onEditingFinished() {
+        finish()
     }
 }

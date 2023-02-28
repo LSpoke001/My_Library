@@ -6,7 +6,7 @@ import com.example.mylibrary.domain.entity.Book
 import com.example.mylibrary.domain.repository.BookRepository
 import kotlin.random.Random
 
-class BookRepositoryImpl: BookRepository {
+object BookRepositoryImpl: BookRepository {
 
     private val bookList = sortedSetOf<Book>({o1, o2 -> o1.id.compareTo(o2.id)})
     private val bookListLD = MutableLiveData<List<Book>>()

@@ -10,7 +10,7 @@ import com.example.mylibrary.domain.use_cases.EditBookItemUseCase
 import com.example.mylibrary.domain.use_cases.GetBookItemUseCase
 
 class AddAndEditViewModel: ViewModel() {
-    private val repository = BookRepositoryImpl()
+    private val repository = BookRepositoryImpl
 
     private val getBookItemUseCase = GetBookItemUseCase(repository)
     private val addBookItemUseCase = AddBookItemUseCase(repository)

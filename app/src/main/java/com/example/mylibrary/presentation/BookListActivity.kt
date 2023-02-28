@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.mylibrary.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class BookListActivity : AppCompatActivity() {
+class BookListActivity : AppCompatActivity(), AddAndEditFragment.OnEditingFinishedListener {
 
     private lateinit var viewModel: BookListViewModel
     private lateinit var bookListAdapter: BookListAdapter
@@ -27,7 +27,7 @@ class BookListActivity : AppCompatActivity() {
 
         buttonAddBook.setOnClickListener {
             if(isLandscape()) {
-                launchFragment(AddAndEditFragment())
+                launchFragment(AddAndEditFragment.newInstanceAddFragment())
             }else{
                 startActivity(AddAndEditScreenActivity.newInstanceAddIntent(this))
             }
@@ -95,10 +95,14 @@ class BookListActivity : AppCompatActivity() {
     private fun setupClickListener() {
         bookListAdapter.onBookItemClickListener = {
             if(isLandscape()){
-                launchFragment(AddAndEditFragment())
+                launchFragment(AddAndEditFragment.newInstanceEditFragment(it.id))
             }else {
                 startActivity(AddAndEditScreenActivity.newInstanceEditIntent(this, it.id))
             }
         }
+    }
+
+    override fun onEditingFinished() {
+        supportFragmentManager.popBackStack()
     }
 }
