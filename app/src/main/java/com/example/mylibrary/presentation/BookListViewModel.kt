@@ -8,7 +8,7 @@ import com.example.mylibrary.domain.use_cases.EditBookItemUseCase
 import com.example.mylibrary.domain.use_cases.GetBookListUseCase
 
 class BookListViewModel: ViewModel() {
-    private val repository = BookRepositoryImpl()
+    private val repository = BookRepositoryImpl
 
     private val getBookListUseCase = GetBookListUseCase(repository)
     private val deleteBookItemUseCase = DeleteBookItemUseCase(repository)
