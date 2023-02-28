@@ -61,6 +61,13 @@ class AddAndEditFragment: Fragment() {
         addChangeErrorListener()
         launchRightMode()
         observeViewModel()
+        btnAddImg.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container,
+                    TestFragment.newInstanceTestFactory("Русалка", "Пушкин")
+                )
+                .commit()
+        }
     }
 
     private fun observeViewModel() {
