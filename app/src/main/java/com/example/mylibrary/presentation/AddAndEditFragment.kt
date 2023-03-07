@@ -11,6 +11,8 @@ import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.mylibrary.R
+import com.example.mylibrary.databinding.ActivityAddAndEditScreenBinding
+import com.example.mylibrary.databinding.FragmentAddEditBookItemBinding
 import com.example.mylibrary.domain.entity.Book
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -23,12 +25,10 @@ class AddAndEditFragment: Fragment() {
     private var screenMode = UNKNOWN_MODE
     private var bookId = Book.UNIDENTIFIED_ID
 
-    private lateinit var tilTitle : TextInputLayout
-    private lateinit var tilAuthor : TextInputLayout
-    private lateinit var etTitle : TextInputEditText
-    private lateinit var etAuthor : TextInputEditText
-    private lateinit var btnSave : Button
-    private lateinit var btnAddImg : Button
+
+    private var _binding: FragmentAddEditBookItemBinding? = null
+    private val binding: FragmentAddEditBookItemBinding
+        get() = _binding ?: throw RuntimeException("FragmentAddEditBookItemBinding == null")
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -49,37 +49,22 @@ class AddAndEditFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_add_edit_book_item, container, false)
+        _binding = FragmentAddEditBookItemBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel = ViewModelProvider(this)[AddAndEditViewModel::class.java]
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
 
-        initView(view)
-        addChangeErrorListener()
         launchRightMode()
         observeViewModel()
     }
 
     private fun observeViewModel() {
-        viewModel.errorInputTitle.observe(viewLifecycleOwner){
-            val message = if(it){
-                "Can not be empty"
-            }else{
-                null
-            }
-            tilTitle.error = message
-        }
-        viewModel.errorInputAuthor.observe(viewLifecycleOwner){
-            val message = if(it){
-                "Can not be empty"
-            }else{
-                null
-            }
-            tilAuthor.error = message
-        }
         viewModel.shouldCloseScreen.observe(viewLifecycleOwner){
             onEditingFinishedListener.onEditingFinished()
         }
@@ -94,61 +79,23 @@ class AddAndEditFragment: Fragment() {
 
     private fun launchEditMode() {
         viewModel.getBookItem(bookId)
-        viewModel.bookItem.observe(viewLifecycleOwner){
-            etTitle.setText(it.title)
-            etAuthor.setText(it.author)
-        }
-        btnSave.setOnClickListener {
+        binding.btnSave.setOnClickListener {
             viewModel.editBookItem(
-                etTitle.text?.toString(),
-                etAuthor.text?.toString()
+                binding.etTitle.text?.toString(),
+                binding.etAuthor.text?.toString()
             )
         }
    }
 
     private fun launchAddMode() {
-        btnSave.setOnClickListener {
+        binding.btnSave.setOnClickListener {
             viewModel.addBookItem(
-                etTitle.text?.toString(),
-                etAuthor.text?.toString()
+                binding.etTitle.text?.toString(),
+                binding.etAuthor.text?.toString()
             )
         }
     }
 
-    private fun addChangeErrorListener() {
-        etTitle.addTextChangedListener(object : TextWatcher{
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                viewModel.resetErrorInputTitle()
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-            }
-        })
-
-        etAuthor.addTextChangedListener(object : TextWatcher{
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                viewModel.resetErrorInputAuthor()
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-            }
-        })
-    }
-
-    private fun initView(view: View) {
-        tilTitle = view.findViewById(R.id.til_title)
-        tilAuthor = view.findViewById(R.id.til_author)
-        etTitle = view.findViewById(R.id.et_title)
-        etAuthor = view.findViewById(R.id.et_author)
-        btnSave = view.findViewById(R.id.btn_save)
-        btnAddImg = view.findViewById(R.id.btn_add_img)
-    }
 
     private fun parseParam(){
         val arguments = requireArguments()
@@ -166,6 +113,11 @@ class AddAndEditFragment: Fragment() {
             }
             bookId = arguments.getInt(BOOK_ITEM_ID)
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 
     companion object{

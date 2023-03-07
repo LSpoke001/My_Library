@@ -2,8 +2,13 @@ package com.example.mylibrary.presentation
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.ListAdapter
 import com.example.mylibrary.R
+import com.example.mylibrary.databinding.ItemDisabledBinding
+import com.example.mylibrary.databinding.ItemDisabledBindingImpl
+import com.example.mylibrary.databinding.ItemEnabledBinding
 import com.example.mylibrary.domain.entity.Book
 
 class BookListAdapter: ListAdapter<Book, BookItemHolder>(
@@ -19,19 +24,33 @@ class BookListAdapter: ListAdapter<Book, BookItemHolder>(
             ENABLED_ITEM -> R.layout.item_enabled
             else -> throw RuntimeException("Unknown view type $viewType")
         }
-        val view = LayoutInflater.from(parent.context).inflate(layout, parent, false)
-        return BookItemHolder(view)
+        val binding = DataBindingUtil.inflate<ViewDataBinding>(
+            LayoutInflater.from(parent.context),
+            layout,
+            parent,
+            false
+        )
+        return BookItemHolder(binding)
     }
 
     override fun onBindViewHolder(holder: BookItemHolder, position: Int) {
         val item = getItem(position)
-        holder.tvTitle.text = item.title
-        holder.tvAuthor.text = item.author
+        val binding = holder.binding
 
-        holder.view.setOnClickListener{
+        when(binding){
+            is ItemDisabledBinding ->{
+                binding.bookItem = item
+            }
+            is ItemEnabledBinding -> {
+                binding.bookItem = item
+            }
+        }
+
+
+        binding.root.setOnClickListener{
             onBookItemClickListener?.invoke(item)
         }
-        holder.view.setOnLongClickListener {
+        binding.root.setOnLongClickListener {
             onBookItemLongClickListener?.invoke(item)
             true
         }

@@ -2,6 +2,7 @@ package com.example.mylibrary.data
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.mylibrary.R
 import com.example.mylibrary.domain.entity.Book
 import com.example.mylibrary.domain.repository.BookRepository
 import kotlin.random.Random
@@ -26,6 +27,9 @@ object BookRepositoryImpl: BookRepository {
     override fun addBookItem(book: Book) {
         if(book.id == Book.UNIDENTIFIED_ID){
             book.id = autoincrement++
+        }
+        if(book.enabled){
+            book.imgUrl = R.drawable.icons_for_book
         }
         bookList.add(book)
         updateBookList()
