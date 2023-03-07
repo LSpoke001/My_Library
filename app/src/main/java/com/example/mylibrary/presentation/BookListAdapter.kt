@@ -39,12 +39,10 @@ class BookListAdapter: ListAdapter<Book, BookItemHolder>(
 
         when(binding){
             is ItemDisabledBinding ->{
-                binding.tvTitle.text = item.title
-                binding.tvAuthor.text = item.author
+                binding.bookItem = item
             }
             is ItemEnabledBinding -> {
-                binding.tvTitle.text = item.title
-                binding.tvAuthor.text = item.author
+                binding.bookItem = item
             }
         }
 

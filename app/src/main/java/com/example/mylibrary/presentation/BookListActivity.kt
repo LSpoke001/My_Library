@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mylibrary.R
+import com.example.mylibrary.databinding.ActivityMainBinding
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class BookListActivity : AppCompatActivity(), AddAndEditFragment.OnEditingFinishedListener {
@@ -15,17 +16,17 @@ class BookListActivity : AppCompatActivity(), AddAndEditFragment.OnEditingFinish
     private lateinit var viewModel: BookListViewModel
     private lateinit var bookListAdapter: BookListAdapter
     private lateinit var buttonAddBook: FloatingActionButton
-    private var fragmentContainer: FragmentContainerView? = null
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        fragmentContainer = findViewById(R.id.fragment_container)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        buttonAddBook = findViewById(R.id.btn_add_book)
 
-        buttonAddBook.setOnClickListener {
+        binding.btnAddBook.setOnClickListener {
             if(isLandscape()) {
                 launchFragment(AddAndEditFragment.newInstanceAddFragment())
             }else{
@@ -50,18 +51,17 @@ class BookListActivity : AppCompatActivity(), AddAndEditFragment.OnEditingFinish
     }
 
     private fun setupRecyclerView() {
-        val rvBookList = findViewById<RecyclerView>(R.id.rv_bookList)
-        with(rvBookList){
+        with(binding.rvBookList){
             bookListAdapter = BookListAdapter()
             adapter= bookListAdapter
         }
         setupClickListener()
         setupLongClickListener()
-        setupSwipeBookItem(rvBookList)
+        setupSwipeBookItem(binding.rvBookList)
     }
 
     private fun isLandscape(): Boolean{
-        return fragmentContainer != null
+        return binding.fragmentContainer != null
     }
 
     private fun setupSwipeBookItem(rvBookList: RecyclerView?) {
