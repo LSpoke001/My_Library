@@ -3,6 +3,7 @@ package com.example.mylibrary.data
 import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.Transformations
 import com.example.mylibrary.domain.entity.Book
 import com.example.mylibrary.domain.repository.BookRepository
 
@@ -31,10 +32,10 @@ class BookRepositoryImpl(
     }
 
 
-    override fun getBookList(): LiveData<List<Book>> = MediatorLiveData<List<Book>>().apply {
-        addSource(bookListDao.getBookList()){
-            value = mapper.mapListDbModelToListEntity(it)
-        }
+    override fun getBookList(): LiveData<List<Book>> = Transformations.map(
+        bookListDao.getBookList()
+    ){
+        mapper.mapListDbModelToListEntity(it)
     }
 
 }
