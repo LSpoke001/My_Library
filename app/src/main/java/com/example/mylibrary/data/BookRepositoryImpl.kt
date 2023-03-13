@@ -2,25 +2,23 @@ package com.example.mylibrary.data
 
 import android.app.Application
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.example.mylibrary.R
+import androidx.lifecycle.MediatorLiveData
 import com.example.mylibrary.domain.entity.Book
 import com.example.mylibrary.domain.repository.BookRepository
-import kotlin.random.Random
 
 class BookRepositoryImpl(
     application: Application
 ): BookRepository {
 
     private val bookListDao = AppDatabase.getInstance(application).bookListDao()
-    private val bookListMapper = BookListMapper()
+    private val mapper = BookListMapper()
 
     override fun addBookItem(book: Book) {
-        bookListDao.addBookItem(bookListMapper.mapEntityToDbModel(book))
+        bookListDao.addBookItem(mapper.mapEntityToDbModel(book))
     }
 
     override fun editBookItem(book: Book) {
-        bookListDao.addBookItem(bookListMapper.mapEntityToDbModel(book))
+        bookListDao.addBookItem(mapper.mapEntityToDbModel(book))
     }
 
     override fun deleteBookItem(book: Book) {
@@ -29,13 +27,14 @@ class BookRepositoryImpl(
 
     override fun getBookItem(bookId: Int): Book {
         val bookItemDb = bookListDao.getBookItem(bookId)
-        return bookListMapper.mapDbModelToEntity(bookItemDb)
+        return mapper.mapDbModelToEntity(bookItemDb)
     }
 
-    override fun getBookList(): LiveData<List<Book>> {
-        TODO("Not yet implemented")
-    }
 
-    //  override fun getBookList(): LiveData<List<Book>> = bookListDao.getBookList()
+    override fun getBookList(): LiveData<List<Book>> = MediatorLiveData<List<Book>>().apply {
+        addSource(bookListDao.getBookList()){
+            value = mapper.mapListDbModelToListEntity(it)
+        }
+    }
 
 }
