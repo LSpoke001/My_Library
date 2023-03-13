@@ -1,5 +1,7 @@
 package com.example.mylibrary.presentation
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import com.example.mylibrary.data.BookRepositoryImpl
 import com.example.mylibrary.domain.entity.Book
@@ -7,8 +9,8 @@ import com.example.mylibrary.domain.use_cases.DeleteBookItemUseCase
 import com.example.mylibrary.domain.use_cases.EditBookItemUseCase
 import com.example.mylibrary.domain.use_cases.GetBookListUseCase
 
-class BookListViewModel: ViewModel() {
-    private val repository = BookRepositoryImpl
+class BookListViewModel(application: Application): AndroidViewModel(application) {
+    private val repository = BookRepositoryImpl(application)
 
     private val getBookListUseCase = GetBookListUseCase(repository)
     private val deleteBookItemUseCase = DeleteBookItemUseCase(repository)

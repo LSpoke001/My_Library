@@ -7,7 +7,7 @@ import com.example.mylibrary.domain.entity.Book
 @Entity(tableName = "book_items")
 data class BookItemDbModel(
     @PrimaryKey(autoGenerate = true)
-    var id: Int,
+    val id: Int,
     val title:String,
     val author: String,
     val description: String,

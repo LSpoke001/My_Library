@@ -23,11 +23,10 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
-            bookIcon="@{bookItem.imgUrl}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/add_image"/>
+            android:src="@drawable/add_image"/>
 
         <TextView
             android:id="@+id/tv_title"

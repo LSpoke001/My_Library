@@ -37,8 +37,7 @@
                         android:layout_height="150dp"
                         android:layout_marginStart="24dp"
                         android:layout_marginTop="16dp"
-                        bookIcon="@{viewModel.bookItem.imgUrl}"
-                        tools:src="@drawable/add_image" />
+                        android:src="@drawable/add_image" />
 
                     <Button
                         android:id="@+id/btn_add_img"

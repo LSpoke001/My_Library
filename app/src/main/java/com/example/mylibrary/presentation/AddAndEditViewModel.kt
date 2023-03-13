@@ -1,5 +1,7 @@
 package com.example.mylibrary.presentation
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,8 +11,8 @@ import com.example.mylibrary.domain.use_cases.AddBookItemUseCase
 import com.example.mylibrary.domain.use_cases.EditBookItemUseCase
 import com.example.mylibrary.domain.use_cases.GetBookItemUseCase
 
-class AddAndEditViewModel: ViewModel() {
-    private val repository = BookRepositoryImpl
+class AddAndEditViewModel(application: Application): AndroidViewModel(application){
+    private val repository = BookRepositoryImpl(application)
 
     private val getBookItemUseCase = GetBookItemUseCase(repository)
     private val addBookItemUseCase = AddBookItemUseCase(repository)
