@@ -6,7 +6,7 @@ import com.example.mylibrary.domain.repository.BookRepository
 class DeleteBookItemUseCase(
     private val repository: BookRepository
 ) {
-    fun deleteBookItem(book: Book){
+    suspend fun deleteBookItem(book: Book){
         repository.deleteBookItem(book)
     }
 }

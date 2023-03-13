@@ -6,7 +6,7 @@ import com.example.mylibrary.domain.repository.BookRepository
 class AddBookItemUseCase(
     private val repository: BookRepository
 ) {
-    fun addBookItem(book: Book){
+    suspend fun addBookItem(book: Book){
         repository.addBookItem(book)
     }
 }

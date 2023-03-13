@@ -13,11 +13,11 @@ interface BookListDao {
     fun getBookList(): LiveData<List<BookItemDbModel>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addBookItem(bookItem: BookItemDbModel)
+    suspend fun addBookItem(bookItem: BookItemDbModel)
 
     @Query("DELETE FROM book_items WHERE id=:bookItemId")
-    fun deleteBookItem(bookItemId: Int)
+    suspend fun deleteBookItem(bookItemId: Int)
 
     @Query("SELECT * FROM book_items WHERE id=:bookItemId LIMIT 1")
-    fun getBookItem(bookItemId: Int): BookItemDbModel
+    suspend fun getBookItem(bookItemId: Int): BookItemDbModel
 }

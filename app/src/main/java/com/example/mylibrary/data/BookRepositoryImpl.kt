@@ -14,19 +14,19 @@ class BookRepositoryImpl(
     private val bookListDao = AppDatabase.getInstance(application).bookListDao()
     private val mapper = BookListMapper()
 
-    override fun addBookItem(book: Book) {
+    override suspend fun addBookItem(book: Book) {
         bookListDao.addBookItem(mapper.mapEntityToDbModel(book))
     }
 
-    override fun editBookItem(book: Book) {
+    override suspend fun editBookItem(book: Book) {
         bookListDao.addBookItem(mapper.mapEntityToDbModel(book))
     }
 
-    override fun deleteBookItem(book: Book) {
+    override suspend fun deleteBookItem(book: Book) {
         bookListDao.deleteBookItem(book.id)
     }
 
-    override fun getBookItem(bookId: Int): Book {
+    override suspend fun getBookItem(bookId: Int): Book {
         val bookItemDb = bookListDao.getBookItem(bookId)
         return mapper.mapDbModelToEntity(bookItemDb)
     }
