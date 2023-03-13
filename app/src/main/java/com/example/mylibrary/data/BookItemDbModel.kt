@@ -11,6 +11,5 @@ data class BookItemDbModel(
     val title:String,
     val author: String,
     val description: String,
-    val enabled: Boolean = true,
-    val imgUrl: Int
+    val enabled: Boolean
 )

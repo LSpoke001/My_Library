@@ -1,5 +1,6 @@
 package com.example.mylibrary.data
 
+import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.mylibrary.R
@@ -7,57 +8,34 @@ import com.example.mylibrary.domain.entity.Book
 import com.example.mylibrary.domain.repository.BookRepository
 import kotlin.random.Random
 
-object BookRepositoryImpl: BookRepository {
+class BookRepositoryImpl(
+    application: Application
+): BookRepository {
 
-    private val bookList = sortedSetOf<Book>({o1, o2 -> o1.id.compareTo(o2.id)})
-    private val bookListLD = MutableLiveData<List<Book>>()
-    private var autoincrement = 0
-
-    init{
-        for(i in 0 until 10){
-            val item = Book(
-                "Title $i",
-                "Author $i",
-                enabled = Random.nextBoolean()
-            )
-            addBookItem(item)
-        }
-    }
+    private val bookListDao = AppDatabase.getInstance(application).bookListDao()
+    private val bookListMapper = BookListMapper()
 
     override fun addBookItem(book: Book) {
-        if(book.id == Book.UNIDENTIFIED_ID){
-            book.id = autoincrement++
-        }
-        if(book.enabled){
-            book.imgUrl = R.drawable.icons_for_book
-        }
-        bookList.add(book)
-        updateBookList()
+        bookListDao.addBookItem(bookListMapper.mapEntityToDbModel(book))
     }
 
     override fun editBookItem(book: Book) {
-        val oldBook = getBookItem(book.id)
-        bookList.remove(oldBook)
-        addBookItem(book)
+        bookListDao.addBookItem(bookListMapper.mapEntityToDbModel(book))
     }
 
     override fun deleteBookItem(book: Book) {
-        bookList.remove(book)
-        updateBookList()
+        bookListDao.deleteBookItem(book.id)
     }
 
     override fun getBookItem(bookId: Int): Book {
-        return bookList.find{
-            it.id == bookId
-        } ?: throw java.lang.RuntimeException(
-            "Book with id $bookId not found"
-        )
+        val bookItemDb = bookListDao.getBookItem(bookId)
+        return bookListMapper.mapDbModelToEntity(bookItemDb)
     }
 
     override fun getBookList(): LiveData<List<Book>> {
-        return bookListLD
+        TODO("Not yet implemented")
     }
-    private fun updateBookList(){
-        bookListLD.value = bookList.toList()
-    }
+
+    //  override fun getBookList(): LiveData<List<Book>> = bookListDao.getBookList()
+
 }
