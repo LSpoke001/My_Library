@@ -1,10 +1,7 @@
 package com.example.mylibrary.presentation
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.example.mylibrary.data.BookRepositoryImpl
 import com.example.mylibrary.domain.entity.Book
 import com.example.mylibrary.domain.use_cases.AddBookItemUseCase
@@ -21,8 +18,6 @@ class AddAndEditViewModel(application: Application) : AndroidViewModel(applicati
     private val getBookItemUseCase = GetBookItemUseCase(repository)
     private val addBookItemUseCase = AddBookItemUseCase(repository)
     private val editBookItemUseCase = EditBookItemUseCase(repository)
-
-    private val scope = CoroutineScope(Dispatchers.IO)
 
     private val _bookItem = MutableLiveData<Book>()
     val bookItem: LiveData<Book>
@@ -41,7 +36,7 @@ class AddAndEditViewModel(application: Application) : AndroidViewModel(applicati
         get() = _shouldCloseScreen
 
     fun getBookItem(bookId: Int) {
-        scope.launch {
+        viewModelScope.launch {
             val item = getBookItemUseCase.getBookItem(bookId)
             _bookItem.value = item
         }
@@ -51,7 +46,7 @@ class AddAndEditViewModel(application: Application) : AndroidViewModel(applicati
         val title = parseInput(titleInput)
         val author = parseInput(authorInput)
         val validInput = checkValidValue(title, author)
-        scope.launch {
+        viewModelScope.launch {
             if (validInput) {
                 val item = Book(title, author, enabled = true)
                 addBookItemUseCase.addBookItem(item)
@@ -64,7 +59,7 @@ class AddAndEditViewModel(application: Application) : AndroidViewModel(applicati
         val title = parseInput(titleInput)
         val author = parseInput(authorInput)
         val validInput = checkValidValue(title, author)
-        scope.launch {
+        viewModelScope.launch {
             if (validInput) {
                 _bookItem.value?.let {
                     val item = it.copy(title = title, author = author)
@@ -102,10 +97,5 @@ class AddAndEditViewModel(application: Application) : AndroidViewModel(applicati
 
     private fun finishWork() {
         _shouldCloseScreen.value = Unit
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        scope.cancel()
     }
 }

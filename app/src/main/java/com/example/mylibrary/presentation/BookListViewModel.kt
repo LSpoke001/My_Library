@@ -3,6 +3,7 @@ package com.example.mylibrary.presentation
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.mylibrary.data.BookRepositoryImpl
 import com.example.mylibrary.domain.entity.Book
 import com.example.mylibrary.domain.use_cases.DeleteBookItemUseCase
@@ -21,22 +22,16 @@ class BookListViewModel(application: Application): AndroidViewModel(application)
     private val editBookItemUseCase = EditBookItemUseCase(repository)
 
     val bookList = getBookListUseCase.getBookList()
-    private val scope = CoroutineScope(Dispatchers.IO)
 
     fun deleteBookItem(book: Book){
-        scope.launch {
+        viewModelScope.launch {
             deleteBookItemUseCase.deleteBookItem(book)
         }
     }
     fun changeEnabledBookItem(book: Book){
-        scope.launch {
+        viewModelScope.launch {
             val newItem = book.copy(enabled = !book.enabled)
             editBookItemUseCase.editBookItem(newItem)
         }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        scope.cancel()
     }
 }
